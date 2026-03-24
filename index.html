@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MIS Chapter 4 Study Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0B0E14;
+            --surface: #161B22;
+            --accent: #58A6FF;
+            --text-main: #E6EDF3;
+            --text-dim: #8B949E;
+            --correct: #238636;
+            --wrong: #DA3633;
+            --border: #30363D;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        nav {
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        nav h1 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+
+        .nav-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.3s;
+        }
+
+        .nav-btn.active {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+
+        main {
+            margin-left: 260px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .vocab-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .vocab-card h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            display: block;
+            margin-top: 1rem;
+        }
+
+        .example-box {
+            background: rgba(88, 166, 255, 0.05);
+            border-left: 3px solid var(--accent);
+            padding: 1rem;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .q-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .q-number {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .scenario {
+            line-height: 1.65;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .question-line {
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .option {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-top: 0.6rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--accent);
+        }
+
+        .option.correct {
+            background: var(--correct);
+            border-color: var(--correct);
+        }
+
+        .option.wrong {
+            background: var(--wrong);
+            border-color: var(--wrong);
+        }
+
+        .answer-block {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            border: 1px solid var(--border);
+        }
+
+        .answer-block strong {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            body {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h1>MIS Chapter 4</h1>
+    <button class="nav-btn active" onclick="showTab('vocab', this)">Terms</button>
+    <button class="nav-btn" onclick="showTab('quiz', this)">Practice Quiz</button>
+    <div style="margin-top: 2rem; font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;">
+        Focus: disruption, product strategy, digital economics, long tail markets, and cost structure.
+    </div>
+</nav>
+
+<main>
+    <section id="vocab" class="section active">
+        <input type="text" class="search-bar" id="search" placeholder="Search Chapter 4 terms..." onkeyup="filterVocab()">
+        <div id="vocab-container"></div>
+    </section>
+
+    <section id="quiz" class="section">
+        <div id="quiz-container"></div>
+    </section>
+</main>
+
+<script>
+const vocabData = [
+    {
+        term: "Cannibalism (the business kind)",
+        exact: "A situation in which a company’s new product reduces sales of its existing products because customers switch within the same firm.",
+        simple: "When a company’s new product steals sales from its own older product.",
+        example: "A new streaming plan causes customers to leave the company’s older premium plan, so the firm cannibalizes its own sales."
+    },
+    {
+        term: "Cash cow",
+        exact: "A product, business unit, or offering that generates strong, steady cash flow with relatively little additional investment.",
+        simple: "A product that brings in dependable money.",
+        example: "An old but popular software subscription can be a cash cow if it still earns a lot with low upkeep."
+    },
+    {
+        term: "Creosote bush",
+        exact: "A metaphor for dominant firms that crowd out smaller competitors by taking up most of the market’s resources and customer attention.",
+        simple: "A big company that makes it hard for smaller firms to grow around it.",
+        example: "A giant platform can act like a creosote bush by controlling so much traffic that smaller startups struggle to survive."
+    },
+    {
+        term: "Disruptive technology/disruptive innovation",
+        exact: "A new technology or innovation that begins with a simpler, cheaper, or more accessible offering and can eventually reshape an industry.",
+        simple: "A new idea or technology that changes an industry over time.",
+        example: "Streaming services disrupted video rental stores by offering a more convenient alternative."
+    },
+    {
+        term: "Fixed costs",
+        exact: "Costs that do not change in the short run as output rises or falls, such as rent, salaries, or major infrastructure expenses.",
+        simple: "Costs a business must pay even if it makes more or less of something.",
+        example: "A company still pays office rent each month even if sales drop."
+    },
+    {
+        term: "Key performance indicators (KPIs)",
+        exact: "Important measures used to track whether a business or project is meeting its main goals.",
+        simple: "The most important numbers used to judge success.",
+        example: "Monthly active users and customer retention can be KPIs for an app company."
+    },
+    {
+        term: "Long tail",
+        exact: "A strategy or market pattern in which many low-demand products together can create significant total sales, especially in digital markets.",
+        simple: "Selling lots of niche products that add up to strong total demand.",
+        example: "An online music platform earns money not only from hit songs but also from thousands of niche tracks."
+    },
+    {
+        term: "Marginal costs",
+        exact: "The cost of producing one additional unit of a product or service.",
+        simple: "The cost of making one more unit.",
+        example: "Once software is built, the marginal cost of giving one more person a download can be very low."
+    }
+];
+
+const quizData = [
+    {
+        scenario: "A company sells a popular note-taking app and then releases a newer version with AI features. Many customers stop paying for the old version and switch to the new one, even though both products are sold by the same firm. The manager says this may still be worth it if the new product keeps the company ahead of rivals.",
+        question: "Which concept BEST describes what is happening to the company’s older product?",
+        options: [
+            "A. Cash cow because the old version still creates strong steady revenue",
+            "B. Cannibalism because the new product is taking sales from the company’s existing product",
+            "C. Long tail because many niche users are still subscribing",
+            "D. Creosote bush because the firm is blocking smaller competitors"
+        ],
+        correct: 1,
+        explanation: "B is correct because cannibalism occurs when a company’s new offering steals sales from its own existing offering. A is wrong because the scenario emphasizes lost sales to the new version, not steady low-investment cash generation. C is wrong because the issue is internal product substitution, not a large number of niche sales adding up. D is wrong because the scenario is about one product affecting another within the same company, not about crowding out smaller firms."
+    },
+    {
+        scenario: "A professor explains that digital businesses often spend a lot of money building a platform at the beginning, but then the cost of serving one extra user can be tiny. A student gives the example of a music app that costs a lot to build, but letting one more person stream a song costs almost nothing. The class is asked to identify the cost concept behind the extra user example.",
+        question: "Which concept BEST fits the cost of serving one more user after the platform already exists?",
+        options: [
+            "A. Fixed costs because the platform required major upfront investment",
+            "B. KPIs because managers need to track usage and retention",
+            "C. Marginal costs because the question is about the cost of one additional unit of service",
+            "D. Cash cow because strong platforms can generate steady profits"
+        ],
+        correct: 2,
+        explanation: "C is correct because marginal cost is the cost of producing or serving one additional unit. A is related to the earlier platform investment, but the question specifically asks about the extra user, not the upfront build. B is wrong because KPIs are performance measures, not cost concepts. D is wrong because cash cow describes a profitable offering, not the unit economics being explained."
+    },
+    {
+        scenario: "An online bookstore earns solid revenue not only from bestsellers, but also from thousands of obscure books that each sell only a few copies per month. A physical store would not have enough shelf space for all those low-demand titles, but the digital business can still profit because the niche sales add up. The founder says the small sellers together matter more than many people expect.",
+        question: "Which concept BEST explains the founder’s idea?",
+        options: [
+            "A. Long tail because many niche products together can generate meaningful total sales",
+            "B. Disruptive innovation because obscure products replace mainstream products",
+            "C. Fixed costs because digital firms must still pay for servers and staff",
+            "D. Creosote bush because dominant sellers crowd out smaller rivals"
+        ],
+        correct: 0,
+        explanation: "A is correct because the long tail refers to the combined value of many low-demand items, especially in digital markets. B is wrong because the scenario is not about a simpler product disrupting an industry. C is true in general but does not capture the central pattern of niche demand adding up. D is wrong because the story is about product variety and aggregated niche sales, not about dominant firms crowding out others."
+    },
+    {
+        scenario: "A campus delivery startup tracks average delivery time, repeat order rate, monthly active users, and order accuracy every week. The founders say these numbers help them focus on the few signals that matter most for whether the business is healthy. They do not want to drown in too many statistics that are less useful.",
+        question: "Which concept BEST describes the specific measures the founders are focusing on?",
+        options: [
+            "A. Fixed costs because those numbers stay stable over time",
+            "B. KPIs because they are the most important measures used to judge performance",
+            "C. Marginal costs because each order adds another unit of expense",
+            "D. Cash cow because repeat customers create stable revenue"
+        ],
+        correct: 1,
+        explanation: "B is correct because key performance indicators are the most important measures used to track whether a business is meeting its goals. A is wrong because fixed costs are expenses like rent that do not vary much with output. C is wrong because marginal cost is the cost of one additional unit, not a broad set of success measures. D is wrong because cash cow describes a strong cash-generating product, not the metrics used to evaluate performance."
+    },
+    {
+        scenario: "A new streaming service starts by offering a cheap, easy way to watch short videos on mobile phones. At first, traditional media companies dismiss it because the quality seems lower and the audience seems less valuable. A few years later, the new service improves quickly, gains millions of users, and begins changing how people consume entertainment.",
+        question: "Which concept BEST matches the pattern shown in this scenario?",
+        options: [
+            "A. Creosote bush because established firms are blocking smaller rivals",
+            "B. Cash cow because the new service produces steady profits right away",
+            "C. Disruptive innovation because a simpler early offering grows and reshapes the industry over time",
+            "D. Cannibalism because one product is stealing sales from another in the same company"
+        ],
+        correct: 2,
+        explanation: "C is correct because disruptive innovation often starts with a simpler or lower-end offering that established firms dismiss, then improves and reshapes the market. A is wrong because the story is not mainly about dominant firms crowding others out. B is wrong because the scenario is about industry change, not a mature product generating steady cash. D is wrong because the key competition is across firms and market positions, not within one company’s product line."
+    }
+];
+
+function showTab(id, el) {
+    document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+}
+
+function renderVocab() {
+    const container = document.getElementById('vocab-container');
+    container.innerHTML = vocabData.map(item => `
+        <div class="vocab-card">
+            <h3>${item.term}</h3>
+            <span class="label">Exact Definition</span>
+            <p>${item.exact}</p>
+            <span class="label">Simple Definition</span>
+            <p>${item.simple}</p>
+            <div class="example-box">
+                <span class="label" style="margin-top:0">Example</span>
+                ${item.example}
+            </div>
+        </div>
+    `).join('');
+}
+
+function filterVocab() {
+    const query = document.getElementById('search').value.toLowerCase();
+    const cards = document.querySelectorAll('.vocab-card');
+    cards.forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(query) ? 'block' : 'none';
+    });
+}
+
+function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = quizData.map((item, i) => `
+        <div class="q-card" id="q${i}">
+            <div class="q-number">${i + 1}.</div>
+            <p class="scenario">${item.scenario}</p>
+            <p class="question-line">${item.question}</p>
+            ${item.options.map((opt, oi) => `
+                <button class="option" onclick="checkAnswer(${i}, ${oi})">${opt}</button>
+            `).join('')}
+            <div class="answer-block" id="exp${i}">
+                <p><strong>Correct answer:</strong> ${String.fromCharCode(65 + item.correct)}</p>
+                <p><strong>Explanation:</strong> ${item.explanation}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+function checkAnswer(qIdx, oIdx) {
+    const q = quizData[qIdx];
+    const card = document.getElementById(`q${qIdx}`);
+    const options = card.querySelectorAll('.option');
+    const exp = document.getElementById(`exp${qIdx}`);
+
+    options.forEach(btn => btn.disabled = true);
+
+    if (oIdx === q.correct) {
+        options[oIdx].classList.add('correct');
+        exp.style.background = "rgba(35, 134, 54, 0.12)";
+    } else {
+        options[oIdx].classList.add('wrong');
+        options[q.correct].classList.add('correct');
+        exp.style.background = "rgba(218, 54, 51, 0.12)";
+    }
+
+    exp.style.display = "block";
+}
+
+renderVocab();
+renderQuiz();
+</script>
+
+</body>
+</html>
